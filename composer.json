@@ -1,0 +1,15 @@
+{
+  "name": "thrashzone13/wordnet-php-wrapper",
+  "description": "Php wrapper for wordnet dictionary cli",
+  "type": "library",
+  "authors": [
+    {
+      "name": "thrashzone13",
+      "email": "reza.rabbani.369@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": "7.3"
+  }
+}
