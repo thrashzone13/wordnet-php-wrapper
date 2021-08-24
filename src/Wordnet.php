@@ -2,57 +2,42 @@
 
 namespace Thrashzone13\WordnetWrapper;
 
-use Thrashzone13\Wordnet\Overview;
-use Thrashzone13\Wordnet\WordnetCLI;
+use Thrashzone13\WordnetWrapper\Types\Overview;
 
 class Wordnet
 {
-    /** @var Wordnet|null $instance */
-    protected static $instance = null;
-
     /** @var string $word */
-    protected static $word;
+    protected $word;
 
     /** @var string $path */
-    protected static $path;
+    protected $path;
 
-    private function __construct()
+    /**
+     * Wordnet Constructor.
+     *
+     * @param string $path
+     */
+    public function __construct(string $path)
     {
+        $this->path = $path;
+    }
+
+    /**
+     * @param string $path
+     * @return static
+     */
+    public static function create(string $path = 'wn'): self
+    {
+        return (new self($path));
     }
 
     /**
      * @param string $word
-     * @param string $path
-     * @return static
-     */
-    public static function setWord(string $word, string $path = 'wn'): self
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        self::$path = $path;
-        self::$word = $word;
-
-        return self::$instance;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAvailableSearchTypes(): array
-    {
-        $result = explode(PHP_EOL, (new WordnetCLI())->exec(self::$word));
-
-        return [];
-    }
-
-    /**
      * @param string $searchType
      * @return mixed
      */
-    public function search(string $searchType = Overview::class)
+    public function search(string $word, string $searchType = Overview::class)
     {
-        return (new $searchType(self::$word))->parse();
+        return (new $searchType($word, $this->path))->parse();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Thrashzone13\WordnetWrapper\Entities;
 
-class Translation
+abstract class Translation
 {
     /**
      * @var string $translation
@@ -16,12 +16,15 @@ class Translation
 
     /**
      * @param string $translation
+     * @param array $examples
      */
     public function __construct(
-        string $translation
+        string $translation,
+        array  $examples
     )
     {
         $this->translation = $translation;
+        $this->examples = $examples;
     }
 
     /**
@@ -38,5 +41,13 @@ class Translation
     public function getExamples(): array
     {
         return $this->examples;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPartOfSpeech(): string
+    {
+        return (new \ReflectionClass(get_called_class()))->getShortName();
     }
 }

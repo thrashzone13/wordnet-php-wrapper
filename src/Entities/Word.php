@@ -41,4 +41,19 @@ class Word
     {
         return $this->translations;
     }
+
+    /**
+     * @return array
+     */
+    public function includedPartsOfSpeeches(): array
+    {
+        $partsOfSpeeches = [];
+
+        /** @var Translation $translation */
+        foreach ($this->translations as $translation) {
+            array_push($partsOfSpeeches, $translation->getPartOfSpeech());
+        }
+
+        return array_unique($partsOfSpeeches);
+    }
 }
