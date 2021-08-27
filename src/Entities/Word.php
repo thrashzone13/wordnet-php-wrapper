@@ -22,7 +22,7 @@ class Word
         array  $translations
     )
     {
-        $this->word = $word;
+        $this->word = trim($word);
         $this->translations = $translations;
     }
 

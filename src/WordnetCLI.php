@@ -2,6 +2,7 @@
 
 namespace Thrashzone13\WordnetWrapper;
 
+use Exception;
 use Thrashzone13\WordnetWrapper\Exceptions\PathIsIncorrectException;
 use Thrashzone13\WordnetWrapper\Exceptions\WordNotFoundException;
 
@@ -12,31 +13,33 @@ abstract class WordnetCLI
     /** @var string $word */
     protected $word;
 
+    /** @var string $path */
+    protected $path;
+
     /** @var string $response */
-    protected $response;
+    private $response;
 
     /**
      * WordnetCLI Constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $word, string $path)
     {
         $this->word = $word;
-        $this->exec($word, $this->getSearchType(), $path);
+        $this->path = $path;
+
+        $this->exec();
     }
 
     /**
-     * @param string $word
-     * @param string|null $searchType
-     * @param string $path
      * @return void
      * @throws PathIsIncorrectException
      * @throws WordNotFoundException
      */
-    private function exec(string $word, string $searchType, string $path = 'wn'): void
+    private function exec(): void
     {
-        $this->response = shell_exec("{$path} {$word} -{$searchType} 2>&1; echo " . self::RESPONSE_STATUS_CODE_NEEDLE . "$?");
+        $this->response = shell_exec("{$this->path} \"{$this->word}\" -{$this->getSearchType()} 2>&1; echo " . self::RESPONSE_STATUS_CODE_NEEDLE . "$?");
 
         if ($this->getResponseStatusCode() === 127) {
             throw new PathIsIncorrectException;
@@ -57,5 +60,16 @@ abstract class WordnetCLI
         return (int)str_between($this->response, self::RESPONSE_STATUS_CODE_NEEDLE, PHP_EOL);
     }
 
+    /**
+     * @return string
+     */
+    protected function getResponse(): string
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return string
+     */
     protected abstract function getSearchType(): string;
 }

@@ -23,7 +23,7 @@ abstract class Translation
         array  $examples
     )
     {
-        $this->translation = $translation;
+        $this->translation = trim($translation);
         $this->examples = $examples;
     }
 
