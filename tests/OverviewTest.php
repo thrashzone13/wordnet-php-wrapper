@@ -8,20 +8,18 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
 {
     public function test_all_parts_of_speeches_are_fetched()
     {
-        /** @var Word $word */
-        $word = Wordnet::create()->search('cat');
-
-        $this->assertTrue(count($word->includedPartsOfSpeeches()) == 2);
+        $this->assertCount(2, Wordnet::create()->search('cat')->includedPartsOfSpeeches());
     }
 
     public function test_word_not_found()
     {
         $this->expectException(WordNotFoundException::class);
+
         Wordnet::create()->search('jijijij');
     }
 
     public function test_return_type_is_word()
     {
-        $this->assertTrue(Wordnet::create()->search('cat') instanceof Word);
+        $this->assertInstanceOf(Word::class, Wordnet::create()->search('cat'));
     }
 }
